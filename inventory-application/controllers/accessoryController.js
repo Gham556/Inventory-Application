@@ -1,8 +1,17 @@
 const Accessory = require("../models/accessories");
 
 // Display list of all accessory.
-exports.accessory_list = (req, res) => {
-  res.send("NOT IMPLEMENTED: accessory list");
+exports.accessory_list = (req, res, next) => {
+    Accessory.find({}, "name description price").sort({name: 1}).exec((err, results) => {
+        if(err) {
+            return next (err);
+        }
+        res.render("accessory_list", {
+            title: "All Accessories",
+            err: err,
+            accessory_list: results
+        });
+    });
 };
 
 // Display detail page for a specific accessory.

@@ -1,8 +1,17 @@
 const Developer = require("../models/developers");
 
 // Display list of all developer.
-exports.developer_list = (req, res) => {
-  res.send("NOT IMPLEMENTED: developer list");
+exports.developer_list = (req, res, next) => {
+    Developer.find({}, "name").sort({name: 1}).exec((err, results) => {
+        if(err) {
+            return next(err);
+        }
+        res.render("developer_list", {
+            title: "Developer List",
+            err: err,
+            developer_list: results
+        });
+    });
 };
 
 // Display detail page for a specific developer.

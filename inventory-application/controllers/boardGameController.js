@@ -1,8 +1,35 @@
 const BoardGame = require("../models/boardGames");
+const Genre = require("../models/genres");
+const Developer = require("../models/developers");
+const Accessory = require("../models/accessories");
+
+const async = require("async");
 
 exports.index = (req, res) => {
-    res.send("NOT IMPLEMENTED: Site Home Page");
-}
+    async.parallel(
+        {
+            boardGame_count(callback) {
+                BoardGame.countDocuments({}, callback);//pass empty object to find all documents of this collection
+            },
+            genre_count(callback) {
+                Genre.countDocuments({}, callback);
+            },
+            developer_count(callback) {
+                Developer.countDocuments({}, callback);
+            },
+            accessory_count(callback) {
+                Accessory.countDocuments({}, callback);
+            } 
+        },
+        (err, results) => {
+            res.render("index", {
+                title: "Inventory Home",
+                error: err,
+                data: results
+            });
+        }
+    );
+};
 
 // Display list of all boardGame.
 exports.boardGame_list = (req, res) => {

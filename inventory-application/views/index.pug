@@ -2,4 +2,17 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
+  p Welcome to #[em InventoryApplication]!
+
+  h1 Dynamic content
+
+  if error
+    p Error getting dynamic content.
+  else
+    p Store Navigation:
+
+    ul
+      li #[strong BoarGames:] !{data.boardGame_count}
+      li #[strong Developers:] !{data.developer_count}
+      li #[strong Accessories:] !{data.accessory_count}
+      li #[strong Genres:] !{data.genre_count}

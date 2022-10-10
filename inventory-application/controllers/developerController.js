@@ -1,5 +1,6 @@
 const Developer = require("../models/developers");
 const BoardGame = require("../models/boardGames");
+const { body, validationResult } = require('express-validator');
 
 const async = require("async");
 
@@ -45,13 +46,35 @@ exports.developer_detail = (req, res, next) => {
 
 // Display developer create form on GET.
 exports.developer_create_get = (req, res) => {
-  res.send("NOT IMPLEMENTED: developer create GET");
+  res.render("developer_form", { title: "Create Developer"});
 };
 
 // Handle developer create on POST.
-exports.developer_create_post = (req, res) => {
-  res.send("NOT IMPLEMENTED: developer create POST");
-};
+exports.developer_create_post = [
+    body("name").trim().isLength({ min: 1 }).escape().withMessage("Name Must Be Specified"),
+    (req, res, next) => {
+        const errors = validationResult(req);
+
+        if(!errors.isEmpty()){
+            res.render("developer_form", {
+                title: "Create Developer",
+                developer: req.body,
+                errors: errors.array(),
+            });
+            return;
+        }
+
+        const developer = new Developer({
+            name: req.body.name,
+        });
+        developer.save((err) => {
+            if(err) {
+                return next(err);
+            }
+            res.redirect(developer.url);
+        });
+    }
+]
 
 // Display developer delete form on GET.
 exports.developer_delete_get = (req, res) => {

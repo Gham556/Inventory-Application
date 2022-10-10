@@ -42,8 +42,21 @@ exports.boardGame_list = (req, res, next) => {
 };
 
 // Display detail page for a specific boardGame.
-exports.boardGame_detail = (req, res) => {
-  res.send(`NOT IMPLEMENTED: boardGame detail: ${req.params.id}`);
+exports.boardGame_detail = (req, res, next) => {
+    BoardGame.findById(req.params.id).populate('genre').populate('developer').exec((err, results) => {
+        if(err) {
+            return next(err);
+        }
+        if (results === null) {
+            const err = new Error("Board Game Not Found");
+            err.status = 404;
+            return next(err);
+        }
+        res.render("boardGame_detail", {
+            title: "Book Detail",
+            boardGame_detail: results
+        });
+    });
 };
 
 // Display boardGame create form on GET.

@@ -1,0 +1,23 @@
+extends layout
+
+block content
+   h1 Board Game: #{boardGame_detail.title}
+
+   div(style='margin-left:20px;margin-top:20px')
+
+   p #[strong Developer: ]
+    a(href=boardGame_detail.developer.url) #{boardGame_detail.developer.name}
+
+   p #[strong Genre: ]
+    each val, index in boardGame_detail.genre
+     a(href=val.url) #{val.name}
+     if index < boardGame_detail.genre.length - 1
+        |, 
+
+   p #[strong Player Count:] #{boardGame_detail.playerCount} 
+
+   p #[strong Play Time:] #{boardGame_detail.playTime} 
+
+   p #[strong Price:] #{boardGame_detail.price}   
+    
+   

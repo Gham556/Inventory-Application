@@ -32,8 +32,13 @@ exports.index = (req, res) => {
 };
 
 // Display list of all boardGame.
-exports.boardGame_list = (req, res) => {
-  res.send("NOT IMPLEMENTED: boardGame list");
+exports.boardGame_list = (req, res, next) => {
+  BoardGame.find({}, "title price").sort({title: 1}).exec(function (err, results) {
+    if (err) {
+        return next (err);
+    }
+    res.render("boardGame_list", {title: "Board Games", boardGame_list: results});
+  });
 };
 
 // Display detail page for a specific boardGame.

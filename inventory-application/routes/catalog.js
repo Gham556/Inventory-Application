@@ -65,28 +65,28 @@ router.get("/developers", developer_controller.developer_list);
 /// boardGame ROUTES ///
 
 // GET request for creating a boardGame. NOTE This must come before route that displays boardGame (uses id).
-router.get("/boardGame/create", boardGame_controller.boardGame_create_get);
+router.get("/games/create", boardGame_controller.boardGame_create_get);
 
 //POST request for creating boardGame.
-router.post("/boardGame/create", boardGame_controller.boardGame_create_post);
+router.post("/games/create", boardGame_controller.boardGame_create_post);
 
 // GET request to delete boardGame.
-router.get("/boardGame/:id/delete", boardGame_controller.boardGame_delete_get);
+router.get("/games/:id/delete", boardGame_controller.boardGame_delete_get);
 
 // POST request to delete boardGame.
-router.post("/boardGame/:id/delete", boardGame_controller.boardGame_delete_post);
+router.post("/games/:id/delete", boardGame_controller.boardGame_delete_post);
 
 // GET request to update boardGame.
-router.get("/boardGame/:id/update", boardGame_controller.boardGame_update_get);
+router.get("/games/:id/update", boardGame_controller.boardGame_update_get);
 
 // POST request to update boardGame.
-router.post("/boardGame/:id/update", boardGame_controller.boardGame_update_post);
+router.post("/games/:id/update", boardGame_controller.boardGame_update_post);
 
 // GET request for one boardGame.
-router.get("/boardGame/:id", boardGame_controller.boardGame_detail);
+router.get("/games/:id", boardGame_controller.boardGame_detail);
 
 // GET request for list of all boardGame.
-router.get("/boardGames", boardGame_controller.boardGame_list);
+router.get("/games", boardGame_controller.boardGame_list);
 
 /// accessory ROUTES ///
 

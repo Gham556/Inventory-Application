@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h1= title
+
+  ul
+    each boardGame in boardGame_list
+      li
+        a(href=boardGame.url) #{boardGame.title}
+        |  (#{boardGame.price})
+
+    else
+      li There are no games.

@@ -1,0 +1,16 @@
+extends layout 
+
+block content
+   h1 Developer: #{developer.name}
+
+   div(style='margin-left:20px;margin-top:20px')
+
+   p #[strong Board Games: ]
+    ul
+        each game in developer_games 
+            li  
+                a(href=game.url) #{game.title} #{game.price}
+
+
+    
+   

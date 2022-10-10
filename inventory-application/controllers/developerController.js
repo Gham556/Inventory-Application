@@ -1,4 +1,7 @@
 const Developer = require("../models/developers");
+const BoardGame = require("../models/boardGames");
+
+const async = require("async");
 
 // Display list of all developer.
 exports.developer_list = (req, res, next) => {
@@ -15,8 +18,29 @@ exports.developer_list = (req, res, next) => {
 };
 
 // Display detail page for a specific developer.
-exports.developer_detail = (req, res) => {
-  res.send(`NOT IMPLEMENTED: developer detail: ${req.params.id}`);
+exports.developer_detail = (req, res, next) => {
+    async.parallel({
+        developer(callback) {
+            Developer.findById(req.params.id).exec(callback);
+        },
+        developer_games(callback) {
+            BoardGame.find({developer: req.params.id}, "title price").exec(callback);
+        }
+    }, (err, results) => {
+        if (err) {
+            return next(err);
+        }
+        if (results.developer === null) {
+            const err = new Error("Developer Not Found");
+            err.status= 404;
+            return next(err);
+        }
+        res.render("developer_detail", {
+            title: "Developer Details",
+            developer: results.developer,
+            developer_games: results.developer_games
+        });
+    });
 };
 
 // Display developer create form on GET.

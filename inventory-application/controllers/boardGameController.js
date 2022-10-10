@@ -3,6 +3,7 @@ const Genre = require("../models/genres");
 const Developer = require("../models/developers");
 const Accessory = require("../models/accessories");
 
+const { body, validationResult } = require('express-validator');
 const async = require("async");
 
 exports.index = (req, res) => {

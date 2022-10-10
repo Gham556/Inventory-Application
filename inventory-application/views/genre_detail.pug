@@ -1,0 +1,17 @@
+extends layout
+
+block content
+   h1 Genre: #{genre.name}
+
+   div(style='margin-left:20px;margin-top:20px')
+
+    h4 Board Games
+
+    dl
+      each boardGame in genre_boardGames
+        dt
+          a(href=boardGame.url) #{boardGame.title}
+        dd #{boardGame.summary}
+
+      else
+        p This genre has no Board Games

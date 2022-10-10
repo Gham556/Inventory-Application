@@ -6,7 +6,8 @@ block content
   ul 
     each accessory in accessory_list 
         li 
-            a(ahref=accessory.url) #{accessory.name} #{accessory.price} 
+            a(href=accessory.url) #{accessory.name} 
+            | #{accessory.price} 
             br           
             | #{accessory.description}
 

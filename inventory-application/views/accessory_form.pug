@@ -1,0 +1,21 @@
+extends layout 
+
+block content
+    h1 #{title}
+
+    form(method='POST' action='')
+        div.form-group
+            label(for='name') Name: 
+            input#name.form-control(type='text' placeholder='Dice Set, Expansions, etc.' name='name' value=(undefined===accessory ? '' : accessory.name))
+        div.form-group
+            label(for='description') Description: 
+            input#name.form-control(type='text' placeholder='This is an add-on set for blah, blah, blah' name='description' value=(undefined===accessory ? '' : accessory.description))
+        div.form-group
+            label(for='price') Name: 
+            input#name.form-control(type='text' placeholder='2.99, 10.99, etc.' name='price' value=(undefined===accessory ? '' : accessory.price))
+        button.btn.btn-primary(type='submit') Submit     
+
+    if errors 
+        ul 
+            for error in errors 
+                li!= error.msg

@@ -18,7 +18,11 @@ block content
                 select#developer.form-control(type='select', placeholder='Select developer' name='developer' required='true' )
                     - developer.sort()
                     for dev in developer
-                        option(value=dev._id) #{dev.name}    
+                         if boardGame
+                            //- Handle GET form, where book.author is an object, and POST form, where it is a string.
+                            option(value= dev._id selected=(dev._id.toString()==boardGame.developer._id || dev._id.toString()==boardGame.dev) ? 'selected' : false) #{dev.name}
+                         else
+                            option(value=dev._id) #{dev.name}  
             div.form-group
                 label Genre:
                     div

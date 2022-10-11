@@ -165,11 +165,142 @@ exports.boardGame_delete_post = (req, res) => {
 };
 
 // Display boardGame update form on GET.
-exports.boardGame_update_get = (req, res) => {
-  res.send("NOT IMPLEMENTED: boardGame update GET");
-};
+exports.boardGame_update_get = (req, res, next) => {
+    async.parallel(
+      {
+        boardGame(callback) {
+          BoardGame.findById(req.params.id)
+            .populate("developer")
+            .populate("genre")
+            .exec(callback);
+        },
+        developers(callback) {
+          Developer.find(callback);
+        },
+        genres(callback) {
+          Genre.find(callback);
+        },
+      },
+      (err, results) => {
+        if (err) {
+          return next(err);
+        }
+        if (results.boardGame == null) {
+          // No results.
+          const err = new Error("Game not found");
+          err.status = 404;
+          return next(err);
+        }
+        // Success.
+        // Mark our selected genres as checked.
+        for (const genre of results.genres) {
+          for (const boardGameGenre of results.boardGame.genre) {
+            if (genre._id.toString() === boardGameGenre._id.toString()) {
+              genre.checked = "true";
+            }
+          }
+        }
+        console.log(results)
+        res.render("boardGame_form", {
+          title: "Update BoardGame",
+          developer: results.developers,
+          genres: results.genres,
+          boardGame: results.boardGame,
+        });
+      }
+    );
+  };
+  
 
 // Handle boardGame update on POST.
-exports.boardGame_update_post = (req, res) => {
-  res.send("NOT IMPLEMENTED: boardGame update POST");
-};
+exports.boardGame_update_post = [
+    // Convert the genre to an array
+    (req, res, next) => {
+      if (!Array.isArray(req.body.genre)) {
+        req.body.genre =
+          typeof req.body.genre === "undefined" ? [] : [req.body.genre];
+      }
+      next();
+    },
+  
+    // Validate and sanitize fields.
+    body("title", "Title must not be empty.")
+      .trim()
+      .isLength({ min: 1 })
+      .escape(),
+    body("playerCount", "playerCount must not be empty.")
+      .trim()
+      .isLength({ min: 1 })
+      .escape(),
+    body("playTime", "playTime must not be empty.")
+      .trim()
+      .isLength({ min: 1 })
+      .escape(),
+    body("developer", "Developer must not be empty").trim().isLength({ min: 1 }).escape(),
+    body("genre.*").escape(),
+    body("price", "Price Must Not Be Empty").trim().isLength({ min: 1 }).escape(),
+  
+    // Process request after validation and sanitization.
+    (req, res, next) => {
+      // Extract the validation errors from a request.
+      const errors = validationResult(req);
+  
+      // Create a Book object with escaped/trimmed data and old id.
+      const boardGame = new BoardGame({
+        title: req.body.title,
+        playerCount: req.body.playerCount,
+        playTime: req.body.playTime,
+        developer: req.body.developer,
+        genre: typeof req.body.genre === "undefined" ? [] : req.body.genre,
+        price: req.body.price,
+        _id: req.params.id, //This is required, or a new ID will be assigned!
+      });
+  
+      if (!errors.isEmpty()) {
+        // There are errors. Render form again with sanitized values/error messages.
+  
+        // Get all authors and genres for form.
+        async.parallel(
+          {
+            developer(callback) {
+              Developer.find(callback);
+            },
+            genres(callback) {
+              Genre.find(callback);
+            },
+          },
+          (err, results) => {
+            if (err) {
+              return next(err);
+            }
+  
+            // Mark our selected genres as checked.
+            for (const genre of results.genres) {
+              if (boardGame.genre.includes(genre._id)) {
+                genre.checked = "true";
+              }
+            }
+            res.render("boardGame_form", {
+              title: "Update Game",
+              developer: results.developer,
+              genres: results.genres,
+              boardGame,
+              errors: errors.array(),
+            });
+          }
+        );
+        return;
+      }
+  
+      // Data from form is valid. Update the record.
+      BoardGame.findByIdAndUpdate(req.params.id, boardGame, {}, (err, theBoardGame) => {
+        if (err) {
+          return next(err);
+        }
+  
+        // Successful: redirect to book detail page.
+        res.redirect(theBoardGame.url);
+      });
+    },
+  ];
+  

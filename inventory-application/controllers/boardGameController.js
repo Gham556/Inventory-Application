@@ -61,7 +61,7 @@ exports.boardGame_detail = (req, res, next) => {
 };
 
 // Display boardGame create form on GET.
-exports.boardGame_create_get = (req, res) => {
+exports.boardGame_create_get = (req, res, next) => {
     async.parallel({
         devloper(callback) {
             Developer.find(callback);
@@ -71,12 +71,13 @@ exports.boardGame_create_get = (req, res) => {
         },
     }, (err, results) => {
         if(err) {
+            console.log(err, "at catalog")
             return next(err);
         }
     res.render("boardGame_form", 
     { title: "Create Board Game",
       developer: results.devloper,
-      genre: results.genre,  
+      genres: results.genre,  
      });
 
     })
@@ -94,12 +95,12 @@ exports.boardGame_create_post = [
         next();
     },
 
-    body("title").trim().isLength({ min: 1 }).escape().withMessage("Title Must Be Specified"),
+    body("title").trim().isLength({ min: 1 }).escape().withMessage(`Title Must Be Specified`),
     body("playerCount").trim().isLength({ min: 1 }).escape().withMessage("Player Count Must Be Specified"),
     body("playTime").trim().isLength({ min: 1 }).escape().withMessage("Play Time Must Be Specified"),
     body("developer").trim().isLength({ min: 1 }).escape().withMessage("Developer Must Be Specified"),
     body("genre.*").escape(),
-    body("price").trim().isLength({ min: 1}).escape(),
+    body("price").trim().isLength({ min: 1}).escape().withMessage("Price Must Be Specified"),
 
     //proccess req after validation and sanitation
     (req, res, next) => {
@@ -119,7 +120,7 @@ exports.boardGame_create_post = [
                 devloper(callback) {
                     Developer.find(callback);
                 },
-                genre(callback){
+                genres(callback){
                     Genre.find(callback)
                 },
             }, (err, results) => {
@@ -132,11 +133,12 @@ exports.boardGame_create_post = [
                     genre.checked = "true";
                 }
             }
+            console.log(req.body)
             res.render("boardGame_form", 
             { title: "Create Board Game",
               developer: results.devloper,
-              genre: results.genre,
-              boardGame, 
+              genres: results.genres,
+              game: req.body,
               errors: errors.array(),  
              });
             })

@@ -65,10 +65,10 @@ router.get("/developers", developer_controller.developer_list);
 /// boardGame ROUTES ///
 
 // GET request for creating a boardGame. NOTE This must come before route that displays boardGame (uses id).
-router.get("/games/create", boardGame_controller.boardGame_create_get);
+router.get("/boardGame/create", boardGame_controller.boardGame_create_get);
 
 //POST request for creating boardGame.
-router.post("/games/create", boardGame_controller.boardGame_create_post);
+router.post("/boardGame/create", boardGame_controller.boardGame_create_post);
 
 // GET request to delete boardGame.
 router.get("/games/:id/delete", boardGame_controller.boardGame_delete_get);

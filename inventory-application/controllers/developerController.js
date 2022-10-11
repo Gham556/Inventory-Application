@@ -77,14 +77,72 @@ exports.developer_create_post = [
 ]
 
 // Display developer delete form on GET.
-exports.developer_delete_get = (req, res) => {
-  res.send("NOT IMPLEMENTED: developer delete GET");
-};
+exports.developer_delete_get = (req, res, next) => {
+    async.parallel(
+      {
+        developer(callback) {
+          Developer.findById(req.params.id).exec(callback);
+        },
+        developer_games(callback) {
+          BoardGame.find({ developer: req.params.id }).exec(callback);
+        },
+      },
+      (err, results) => {
+        if (err) {
+          return next(err);
+        }
+        if (results.developer == null) {
+          // No results.
+          res.redirect("/catalog/developers");
+        }
+        // Successful, so render.
+        res.render("developer_delete", {
+          title: "Delete Developer",
+          developer: results.developer,
+          developer_games: results.developer_games,
+        });
+      }
+    );
+  };
+  
 
 // Handle developer delete on POST.
-exports.developer_delete_post = (req, res) => {
-  res.send("NOT IMPLEMENTED: developer delete POST");
+exports.developer_delete_post= (req, res, next) => {
+    async.parallel(
+      {
+        developer(callback) {
+          Developer.findById(req.body.developerid).exec(callback);
+        },
+        developer_games(callback) {
+          BoardGame.find({ developer: req.body.developerid }).exec(callback);
+        },
+      },
+      (err, results) => {
+        if (err) {
+          return next(err);
+        }
+        // Success
+        if (results.developer_games.length > 0) {
+          // developer has books. Render in same way as for GET route.
+          res.render("developer_delete", {
+            title: "Delete developer",
+            developer: results.developer,
+            developer_games: results.developer_games,
+          });
+          return;
+        }
+        // developer has no games. Delete object and redirect to the list of developers.
+        Developer.findByIdAndRemove(req.body.developerid, (err) => {
+          if (err) {
+            return next(err);
+          }
+          // Success - go to developer list
+          res.redirect("/catalog/developers");
+        });
+      }
+    )
 };
+  
 
 // Display developer update form on GET.
 exports.developer_update_get = (req, res) => {

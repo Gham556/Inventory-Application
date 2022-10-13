@@ -1,6 +1,6 @@
-require('dotenv').config();
+require('dotenv').config('./env');
 const mongoose = require("mongoose");
-const mongoDB = "mongodb+srv://Gham556:Fotheringham556@cluster0.mbba2nz.mongodb.net/inventory-app";
+const mongoDB = process.env.SECRET_KEY;
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true});
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "Mongoose Connection error:"));

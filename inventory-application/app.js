@@ -1,3 +1,4 @@
+require('dotenv').config();
 const mongoose = require("mongoose");
 const mongoDB = "mongodb+srv://Gham556:Fotheringham556@cluster0.mbba2nz.mongodb.net/inventory-app";
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true});

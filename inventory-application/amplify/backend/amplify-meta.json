@@ -1,0 +1,15 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-inventoryapplication-app-164010-authRole",
+      "UnauthRoleArn": "arn:aws:iam::785633590440:role/amplify-inventoryapplication-app-164010-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::785633590440:role/amplify-inventoryapplication-app-164010-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-inventoryapplication-app-164010-deployment",
+      "UnauthRoleName": "amplify-inventoryapplication-app-164010-unauthRole",
+      "StackName": "amplify-inventoryapplication-app-164010",
+      "StackId": "arn:aws:cloudformation:us-east-1:785633590440:stack/amplify-inventoryapplication-app-164010/3df280b0-6aae-11ed-9ad9-128d8230a997",
+      "AmplifyAppId": "d1gp3zbqcngxum"
+    }
+  }
+}

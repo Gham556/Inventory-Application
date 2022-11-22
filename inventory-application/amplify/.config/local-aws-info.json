@@ -1,0 +1,12 @@
+{
+  "dev": {
+    "configLevel": "project",
+    "useProfile": false,
+    "awsConfigFilePath": "/home/george/.amplify/awscloudformation/AxJ25ht5OQ"
+  },
+  "app": {
+    "configLevel": "project",
+    "useProfile": true,
+    "profileName": "Gham556"
+  }
+}

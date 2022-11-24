@@ -17,6 +17,13 @@ var catalogRouter = require("./routes/catalog");
 
 var app = express();
 
+//Server Setup
+var http = require('http');
+
+const port = 3000;
+
+
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -30,6 +37,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use("/catalog", catalogRouter)
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -46,5 +55,9 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+app.listen(port, (req, res) => {
+  console.log(`app running on port ${3000}`)
+})
 
 module.exports = app;

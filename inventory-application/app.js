@@ -21,7 +21,7 @@ var app = express();
 var http = require('http');
 
 const port = 3000;
-
+var server = http.createServer(app);
 
 
 // view engine setup
@@ -56,8 +56,8 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.listen(port, (req, res) => {
-  console.log(`app running on port ${3000}`)
+server.listen(port, (req, res) => {
+  console.log(`app running on port ${443}`)
 })
 
 module.exports = app;

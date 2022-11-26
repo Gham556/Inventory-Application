@@ -57,7 +57,7 @@ app.use(function(err, req, res, next) {
 });
 
 server.listen(port, (req, res) => {
-  console.log(`app running on port ${443}`)
+  console.log(`app running on port ${80}`)
 })
 
 module.exports = app;
